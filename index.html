@@ -43,6 +43,12 @@
                     </select>
                 </div>
 
+                <!-- Applicant ID (New Field) -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">เลขที่ประจำตัวผู้สมัคร <span class="text-red-500">*</span></label>
+                    <input type="text" name="applicantId" required placeholder="เช่น 10001, 20001" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-gray-700 font-bold mb-2">คำนำหน้าชื่อ</label>
@@ -99,7 +105,7 @@
         <div id="loader" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white p-6 rounded-xl flex flex-col items-center shadow-2xl">
                 <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
-                <p class="font-bold text-gray-800">กำลังบันทึกข้อมูลและตรวจสอบคิวว่าง...</p>
+                <p class="font-bold text-gray-800">กำลังบันทึกข้อมูลและตรวจสอบระบบ...</p>
                 <p class="text-sm text-gray-500 mt-2">กรุณารอสักครู่</p>
             </div>
         </div>
@@ -107,7 +113,7 @@
 
     <script>
         // *** สำคัญ: นำ URL ที่ได้จากการ Deploy Google Apps Script แบบ "เว็บแอป" มาวางที่นี่ ***
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykI4qYT1auJIp7g8vsnK487xxxbw3K_7suId4I3yIwkze_WT9-ZEkyTAOEB7w-mw_U6w/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbztTrr20ciLk0XvJqrjHSB-VuO5UBhSTG-OuiujXzaJKF_sZyDL4UgGEZaUjGyCp964CQ/exec"; 
 
         const regForm = document.getElementById('regForm');
         const loader = document.getElementById('loader');
