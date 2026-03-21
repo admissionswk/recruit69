@@ -94,6 +94,7 @@
                     <input type="text" name="swkId" placeholder="เลขประจำตัว ส.ว.ค.เดิม (ถ้ามี)" class="w-full p-3 border rounded-lg mb-4 bg-white">
                     
                     <label class="block text-gray-700 font-bold">เลือกแผนการเรียน (เลือกให้ครบ 4 อันดับ) <span class="text-red-500">*</span></label>
+                    <!-- แผน 4 อันดับถูกสร้างด้วย JavaScript ด้านล่าง -->
                     <div class="space-y-3" id="m4PlanContainer"></div>
                 </div>
 
@@ -144,7 +145,7 @@
                         <p class="text-gray-600">รหัสสมัคร: <span id="srId" class="font-bold text-blue-600">XXXXX</span></p>
                         <p class="text-gray-600 border-b pb-4">ประเภท: <span id="srCat">ม.X</span></p>
                         
-                        <!-- ปรับปรุงลำดับการแสดงผลใหม่ -->
+                        <!-- เรียงลำดับใหม่: 1.หมายเลขห้องสอบ 2.ชั้นที่ 3.ชื่ออาคาร 4.ห้องสอบที่ -->
                         <div class="grid grid-cols-2 gap-4 mt-4">
                             <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 text-center col-span-2 shadow-sm">
                                 <p class="text-sm text-gray-500 uppercase font-bold tracking-wide">1. หมายเลขห้องสอบ</p>
@@ -165,7 +166,7 @@
                         </div>
                     </div>
 
-                    <!-- แผนที่ Google Maps -->
+                    <!-- แผนที่ Google Maps (ดาวเทียม) -->
                     <div>
                         <div class="inline-block bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-sm font-bold mb-4">📍 พิกัดอาคารสอบ</div>
                         <div class="rounded-xl overflow-hidden shadow-inner border border-gray-200 h-64 bg-gray-100 relative">
@@ -206,6 +207,7 @@
             document.getElementById('tab-register').className = "flex-1 py-4 text-center transition hover:bg-gray-50 " + (tabId==='register' ? 'tab-active' : 'tab-inactive');
             document.getElementById('tab-search').className = "flex-1 py-4 text-center transition hover:bg-gray-50 " + (tabId==='search' ? 'tab-active' : 'tab-inactive');
             
+            // ซ่อนผลลัพธ์ค้นหาถ้าสลับไปหน้าสมัคร
             if(tabId === 'register') {
                 document.getElementById('searchResult').classList.add('hidden');
             }
