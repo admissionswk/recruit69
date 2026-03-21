@@ -94,7 +94,6 @@
                     <input type="text" name="swkId" placeholder="เลขประจำตัว ส.ว.ค.เดิม (ถ้ามี)" class="w-full p-3 border rounded-lg mb-4 bg-white">
                     
                     <label class="block text-gray-700 font-bold">เลือกแผนการเรียน (เลือกให้ครบ 4 อันดับ) <span class="text-red-500">*</span></label>
-                    <!-- แผน 4 อันดับถูกสร้างด้วย JavaScript ด้านล่าง -->
                     <div class="space-y-3" id="m4PlanContainer"></div>
                 </div>
 
@@ -145,18 +144,23 @@
                         <p class="text-gray-600">รหัสสมัคร: <span id="srId" class="font-bold text-blue-600">XXXXX</span></p>
                         <p class="text-gray-600 border-b pb-4">ประเภท: <span id="srCat">ม.X</span></p>
                         
-                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mt-4 text-center">
-                            <p class="text-sm text-gray-500 uppercase tracking-wide">ห้องสอบที่</p>
-                            <p id="srExamRoom" class="text-4xl font-black text-blue-800">00</p>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center">
-                                <p class="text-sm text-gray-500 uppercase">อาคาร</p>
-                                <p id="srBuilding" class="text-xl font-bold text-gray-800">-</p>
+                        <!-- ปรับปรุงลำดับการแสดงผลใหม่ -->
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 text-center col-span-2 shadow-sm">
+                                <p class="text-sm text-gray-500 uppercase font-bold tracking-wide">1. หมายเลขห้องสอบ</p>
+                                <p id="srRealRoom" class="text-4xl font-black text-blue-800">000</p>
                             </div>
                             <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center">
-                                <p class="text-sm text-gray-500 uppercase">หมายเลขห้อง</p>
-                                <p id="srRealRoom" class="text-xl font-bold text-gray-800">-</p>
+                                <p class="text-sm text-gray-500 uppercase font-bold">2. ชั้นที่</p>
+                                <p id="srFloor" class="text-2xl font-bold text-gray-800">-</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center">
+                                <p class="text-sm text-gray-500 uppercase font-bold">3. ชื่ออาคาร</p>
+                                <p id="srBuilding" class="text-2xl font-bold text-gray-800">-</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center col-span-2">
+                                <p class="text-sm text-gray-500 uppercase font-bold">4. ห้องสอบที่</p>
+                                <p id="srExamRoom" class="text-xl font-bold text-gray-800">-</p>
                             </div>
                         </div>
                     </div>
@@ -165,6 +169,7 @@
                     <div>
                         <div class="inline-block bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-sm font-bold mb-4">📍 พิกัดอาคารสอบ</div>
                         <div class="rounded-xl overflow-hidden shadow-inner border border-gray-200 h-64 bg-gray-100 relative">
+                            <!-- เพิ่มแผนที่ผ่าน iframe -->
                             <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                         </div>
                         <p class="text-xs text-gray-400 mt-2 text-center">* แผนที่ใช้สำหรับอ้างอิงตำแหน่งเบื้องต้น กรุณาดูป้ายบอกทางในโรงเรียนประกอบ</p>
@@ -188,7 +193,7 @@
         // ==========================================
         // *** สำคัญที่สุด: ใส่ URL จาก Google Apps Script ตรงนี้ ***
         // ==========================================
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwD6rc44VWIXUa9G5bcJFKQoc2M7tDnHwT1k0SrLywzQv9i4b6BZ45uFtThY2D9ojlAGg/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRou1Y4v2tV5hJBb3dVx-jOo9zCjxr0D87ez74nBF55Mh534aeJNpldFeMyxK6dxwn2g/exec"; 
 
         // ==========================================
         // UI Logic (Tabs & M4 Form Generation)
@@ -201,13 +206,11 @@
             document.getElementById('tab-register').className = "flex-1 py-4 text-center transition hover:bg-gray-50 " + (tabId==='register' ? 'tab-active' : 'tab-inactive');
             document.getElementById('tab-search').className = "flex-1 py-4 text-center transition hover:bg-gray-50 " + (tabId==='search' ? 'tab-active' : 'tab-inactive');
             
-            // ซ่อนผลลัพธ์การค้นหาเมื่อสลับแท็บ
             if(tabId === 'register') {
                 document.getElementById('searchResult').classList.add('hidden');
             }
         }
 
-        // สร้างฟอร์มแผนการเรียน ม.4 อัตโนมัติ (เพื่อลดบรรทัดโค้ด HTML)
         const m4Container = document.getElementById('m4PlanContainer');
         const planOptions = `<option value="">-- เลือกแผนการเรียน --</option>
             <option value="วิทยาศาสตร์ คณิตศาสตร์-เทคโนโลยี">1) วิทยาศาสตร์ คณิตศาสตร์-เทคโนโลยี</option>
@@ -230,14 +233,12 @@
             </div>`;
         }
 
-        // ควบคุม M4 Form Logic (แสดง/ซ่อน เมื่อเลือก ม.4 ทั่วไป)
         document.getElementById('regCategory').addEventListener('change', function() {
             const isM4 = this.value === 'M4_Gen';
             document.getElementById('m4Section').classList.toggle('hidden', !isM4);
             document.querySelectorAll('.m4-plan').forEach(el => isM4 ? el.setAttribute('required', 'required') : el.removeAttribute('required'));
         });
 
-        // ควบคุมการแสดงช่องระบุภาษาเมื่อเลือก ศิลป์-ภาษา
         document.getElementById('m4PlanContainer').addEventListener('change', function(e) {
             if(e.target.tagName === 'SELECT') {
                 const idNum = e.target.id.replace('plan', '');
@@ -255,17 +256,14 @@
         });
 
         // ==========================================
-        // Map Coordinates (พิกัดอาคาร รร.สุรวิทยาคาร)
-        // ** คุณสามารถเปลี่ยนพิกัด Lat, Long ในนี้ให้ตรงกับตำแหน่งตึกจริงได้ **
+        // Map Coordinates (พิกัดอาคารอัปเดตใหม่)
         // ==========================================
-        const schoolCenter = "14.890666,103.492110"; // พิกัดกลางโรงเรียน กรณีหาตึกไม่เจอ
+        const schoolCenter = "14.87915252251905, 103.49903061666078"; // ป้อมยาม (จุดเริ่มต้น)
         const buildingCoods = {
-            "1": "14.891100, 103.492000",
-            "2": "14.890500, 103.492200",
-            "3": "14.890700, 103.491800",
-            "7": "14.889900, 103.491500",
-            "12": "14.891500, 103.492500"
-            // วิธีเพิ่ม: "หมายเลขอาคารตาม Excel": "ละติจูด, ลองจิจูด"
+            "7": "14.880480096933743, 103.49897802586644",
+            "2": "14.880124785988746, 103.49981931244953",
+            "6": "14.880390724297163, 103.50004485845037",
+            "3": "14.879830509609468, 103.49972007220916"
         };
 
         // ==========================================
@@ -281,9 +279,8 @@
             
             const formData = new FormData(formElement);
             const data = Object.fromEntries(formData.entries());
-            data.action = actionType; // ส่งไปบอก Backend ว่าจะ register หรือ search
+            data.action = actionType;
             
-            // ถ้าเป็นการค้นหา ให้แปลงชื่อคีย์ให้ตรงกับที่ Backend ต้องการ
             if (actionType === 'search') {
                 data.category = data.searchCategory;
                 data.applicantId = data.searchApplicantId;
@@ -300,13 +297,11 @@
                 if (result.status === 'success') {
                     if (actionType === 'register') {
                         alert('สมัครสำเร็จ! ระบบจะพาคุณไปยังหน้าตรวจสอบห้องสอบ');
-                        formElement.reset(); // ล้างข้อมูลฟอร์มสมัคร
+                        formElement.reset(); 
                         
-                        // เอาข้อมูลที่เพิ่งสมัครไปกรอกในหน้าค้นหาให้เลย
                         document.querySelector('[name="searchCategory"]').value = data.category;
                         document.querySelector('[name="searchApplicantId"]').value = data.applicantId;
                         
-                        // สลับไปแท็บค้นหาและกดปุ่ม Submit ค้นหาให้อัตโนมัติ
                         switchTab('search');
                         document.getElementById('searchForm').dispatchEvent(new Event('submit'));
                     } else if (actionType === 'search') {
@@ -322,7 +317,6 @@
             }
         }
 
-        // ดักจับการกด Submit ของฟอร์มทั้งสอง
         document.getElementById('regForm').addEventListener('submit', (e) => { 
             e.preventDefault(); 
             submitData(e.target, 'register'); 
@@ -338,19 +332,20 @@
             document.getElementById('srId').innerText = data.applicantId;
             document.getElementById('srCat').innerText = data.categoryName;
             
-            document.getElementById('srExamRoom').innerText = data.examRoom || "-";
+            // ปรับการแสดงผลลำดับใหม่
+            document.getElementById('srRealRoom').innerText = data.realRoomNumber || "-";
+            document.getElementById('srFloor').innerText = data.floor ? data.floor : "-";
             document.getElementById('srBuilding').innerText = data.building ? "อาคาร " + data.building : "-";
-            document.getElementById('srRealRoom').innerText = data.realRoomNumber ? "ห้อง " + data.realRoomNumber : "-";
+            document.getElementById('srExamRoom').innerText = data.examRoom || "-";
 
             // อัปเดตแผนที่
             const bld = String(data.building).trim();
-            const coords = buildingCoods[bld] || schoolCenter; // หาพิกัดจากตัวแปรด้านบน
+            const coords = buildingCoods[bld] || schoolCenter; // ถ้าหาพิกัดตึกไม่เจอจะใช้พิกัดป้อมยาม
             
-            // สร้าง URL Google Maps แบบฝัง (iframe)
-            const mapUrl = `https://maps.google.com/maps?q=${coords}&hl=th&z=18&output=embed`;
+            // เพิ่ม &t=k เพื่อให้แสดงผล Google Maps เป็นแบบดาวเทียม (Satellite)
+            const mapUrl = `https://maps.google.com/maps?q=${coords}&hl=th&z=18&t=k&output=embed`;
             document.getElementById('mapFrame').src = mapUrl;
 
-            // แสดงกล่องผลลัพธ์
             document.getElementById('searchResult').classList.remove('hidden');
         }
     </script>
