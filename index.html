@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบค้นหาห้องสอบ ส.ว.ค. 2569</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Sarabun', sans-serif; 
+            /* ใส่รูปพื้นหลัง พระอินทร์ทรงช้าง (สามารถเปลี่ยน URL รูปภาพได้) */
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Erawan_Museum_-_Indra_and_Erawan.jpg/1200px-Erawan_Museum_-_Indra_and_Erawan.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        /* สร้าง Overlay ทับรูปภาพ เพื่อให้ตัวหนังสืออ่านง่ายและดู Minimal */
+        .bg-overlay {
+            background-color: rgba(244, 248, 241, 0.85); /* สีขาวอมเขียวอ่อนๆ โปร่งแสง */
+            backdrop-filter: blur(8px);
+            min-height: 100vh;
+        }
+
+        /* โทนสีเขียวพระอินทร์ และ สีทอง */
+        .text-indra-green { color: #1a5c32; }
+        .bg-indra-green { background-color: #1a5c32; }
+        .border-indra-green { border-color: #1a5c32; }
+        .text-indra-gold { color: #d4af37; }
+        .bg-indra-gold { background-color: #d4af37; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="bg-overlay flex flex-col items-center justify-center p-4 py-10">
+
+    <!-- Header -->
+    <div class="text-center mb-8 animate-fade-in">
+        <h1 class="text-4xl md:text-5xl font-bold text-indra-green mb-2" style="text-shadow: 1px 1px 2px rgba(255,255,255,0.8);">
+            ตรวจสอบห้องสอบ
+        </h1>
+        <p class="text-xl font-medium text-gray-700">โรงเรียนสุรวิทยาคาร ประจำปีการศึกษา 2569</p>
+    </div>
+
+    <!-- กล่องค้นหา (Search Box) -->
+    <div class="glass-card w-full max-w-lg p-8 mb-8 animate-fade-in border-t-4 border-indra-green">
+        <form id="searchForm" class="space-y-6">
+            <div>
+                <label class="block text-gray-800 font-bold mb-3 text-lg text-center">
+                    เลขประจำตัวประชาชน (13 หลัก)
+                </label>
+                <input type="text" id="citizenId" name="citizenId" required maxlength="13" pattern="\d{13}" 
+                       placeholder="ระบุเลข 13 หลัก" 
+                       class="w-full p-4 text-center text-xl tracking-widest border-2 border-gray-300 rounded-xl focus:border-indra-green focus:ring-2 focus:ring-green-200 outline-none transition shadow-inner">
+            </div>
+            <button type="submit" class="w-full bg-indra-green text-white font-bold py-4 rounded-xl shadow-lg text-xl hover:bg-green-800 transition transform hover:-translate-y-1">
+                🔍 ค้นหาข้อมูล
+            </button>
+        </form>
+    </div>
+
+    <!-- กล่องแสดงผล (Result) ซ่อนไว้เริ่มต้น -->
+    <div id="searchResult" class="hidden glass-card w-full max-w-4xl p-8 animate-fade-in border-t-4 border-indra-gold">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- ส่วนข้อมูลนักเรียนและห้องสอบ -->
+            <div class="space-y-4">
+                <div class="inline-block bg-yellow-100 text-yellow-800 px-4 py-1 rounded-full text-sm font-bold mb-2">ข้อมูลผู้เข้าสอบ</div>
+                
+                <h3 id="srName" class="text-3xl font-bold text-gray-800 leading-tight">ชื่อ-นามสกุล</h3>
+                <p class="text-gray-600 text-lg">รหัสประจำตัว: <span id="srId" class="font-bold text-indra-green">XXXXX</span></p>
+                <p class="text-gray-600 border-b border-gray-200 pb-4">ประเภท: <span id="srCat">ม.X</span></p>
+                
+                <!-- ลำดับแสดงผล: 1.หมายเลขห้อง 2.ชั้น 3.อาคาร 4.ห้องสอบที่ -->
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-center col-span-2 shadow-sm">
+                        <p class="text-sm text-gray-500 uppercase font-bold tracking-wide">1. หมายเลขห้องสอบ</p>
+                        <p id="srRealRoom" class="text-5xl font-black text-indra-green mt-1">000</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-sm">
+                        <p class="text-sm text-gray-500 uppercase font-bold">2. ชั้นที่</p>
+                        <p id="srFloor" class="text-2xl font-bold text-gray-800 mt-1">-</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-sm">
+                        <p class="text-sm text-gray-500 uppercase font-bold">3. อาคาร</p>
+                        <p id="srBuilding" class="text-2xl font-bold text-gray-800 mt-1">-</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 text-center col-span-2 shadow-sm">
+                        <p class="text-sm text-yellow-700 uppercase font-bold">4. ห้องสอบที่</p>
+                        <p id="srExamRoom" class="text-2xl font-bold text-yellow-800 mt-1">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ส่วนแผนที่ดาวเทียม -->
+            <div class="flex flex-col h-full">
+                <div class="inline-block bg-indra-green text-white px-4 py-1 rounded-full text-sm font-bold mb-4 self-start">📍 พิกัดอาคารสอบ (ดาวเทียม)</div>
+                <div class="rounded-xl overflow-hidden shadow-md border-2 border-gray-200 flex-grow relative min-h-[300px] lg:min-h-full">
+                    <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="border:0; position:absolute; top:0; left:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <p class="text-xs text-gray-500 mt-3 text-center">* แผนที่ใช้สำหรับอ้างอิงตำแหน่งอาคารเบื้องต้น</p>
+            </div>
+
+        </div>
+        
+        <div class="mt-8 text-center border-t pt-6">
+            <button onclick="document.getElementById('searchResult').classList.add('hidden'); document.getElementById('citizenId').value='';" class="text-indra-green font-bold underline hover:text-green-800">
+                ค้นหาคนอื่นต่อ
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loader" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-2xl flex flex-col items-center shadow-2xl">
+            <div class="animate-spin rounded-full h-14 w-14 border-4 border-indra-green border-t-transparent mb-4"></div>
+            <p class="font-bold text-gray-800 text-lg">กำลังค้นหาข้อมูล...</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ==========================================
+    // *** สำคัญ: ใส่ URL จาก Google Apps Script ตรงนี้ ***
+    // ==========================================
+    const SCRIPT_URL = ""; 
+
+    // พิกัดอาคาร (เริ่มต้นจากป้อมยาม)
+    const schoolCenter = "14.87915252251905, 103.49903061666078"; 
+    const buildingCoods = {
+        "7": "14.880480096933743, 103.49897802586644",
+        "2": "14.880124785988746, 103.49981931244953",
+        "6": "14.880390724297163, 103.50004485845037",
+        "3": "14.879830509609468, 103.49972007220916"
+    };
+
+    document.getElementById('searchForm').addEventListener('submit', async (e) => { 
+        e.preventDefault(); 
+        
+        if (!SCRIPT_URL || SCRIPT_URL === "") { 
+            alert('ข้อผิดพลาด: คุณยังไม่ได้ใส่ลิงก์ SCRIPT_URL ในโค้ด HTML'); 
+            return; 
+        }
+
+        const citizenId = document.getElementById('citizenId').value;
+        if(citizenId.length !== 13) {
+            alert('กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก');
+            return;
+        }
+
+        document.getElementById('loader').classList.remove('hidden');
+        document.getElementById('searchResult').classList.add('hidden');
+        
+        try {
+            const response = await fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                body: JSON.stringify({ citizenId: citizenId }) 
+            });
+            
+            const result = await response.json();
+            
+            if (result.status === 'success') {
+                showSearchResult(result.data);
+            } else {
+                alert('แจ้งเตือน: ' + result.message);
+            }
+        } catch (error) {
+            alert('เกิดข้อผิดพลาดในการเชื่อมต่อ: ' + error.message);
+        } finally {
+            document.getElementById('loader').classList.add('hidden');
+        }
+    });
+
+    function showSearchResult(data) {
+        document.getElementById('srName').innerText = data.fullName;
+        document.getElementById('srId').innerText = data.applicantId;
+        document.getElementById('srCat').innerText = data.categoryName;
+        
+        // 1.หมายเลขห้องสอบ 2.ชั้นที่ 3.อาคาร 4.ห้องสอบที่
+        document.getElementById('srRealRoom').innerText = data.realRoomNumber || "-";
+        document.getElementById('srFloor').innerText = data.floor ? data.floor : "-";
+        document.getElementById('srBuilding').innerText = data.building ? "อาคาร " + data.building : "-";
+        document.getElementById('srExamRoom').innerText = data.examRoom || "-";
+
+        // แผนที่ดาวเทียม (&t=k)
+        const bld = String(data.building).trim();
+        const coords = buildingCoods[bld] || schoolCenter;
+        const mapUrl = `https://maps.google.com/maps?q=${coords}&hl=th&z=18&t=k&output=embed`;
+        document.getElementById('mapFrame').src = mapUrl;
+
+        document.getElementById('searchResult').classList.remove('hidden');
+        
+        // เลื่อนหน้าจอลงมาให้เห็นผลลัพธ์พอดี (สำหรับมือถือ)
+        setTimeout(() => {
+            document.getElementById('searchResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+</script>
+</body>
+</html>
