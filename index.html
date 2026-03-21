@@ -96,10 +96,25 @@
                 
                 <h3 id="srName" class="text-3xl font-bold text-gray-800 leading-tight">ชื่อ-นามสกุล</h3>
                 <p class="text-gray-600 text-lg">รหัสประจำตัว: <span id="srId" class="font-bold text-indra-green">XXXXX</span></p>
-                <p class="text-gray-600 border-b border-gray-200 pb-4">ประเภท: <span id="srCat">ม.X</span></p>
+                <p class="text-gray-600 pb-2">ประเภท: <span id="srCat" class="font-bold text-gray-800">ม.X</span></p>
                 
+                <!-- ข้อมูลโรงเรียนเดิม, อำเภอ, จังหวัด -->
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm text-sm">
+                    <p class="text-gray-600 mb-1">โรงเรียนเดิม: <span id="srOldSchool" class="font-bold text-gray-800">-</span></p>
+                    <p class="text-gray-600 mb-1">อำเภอ: <span id="srDistrict" class="font-bold text-gray-800">-</span></p>
+                    <p class="text-gray-600">จังหวัด: <span id="srProvince" class="font-bold text-gray-800">-</span></p>
+                </div>
+
+                <!-- แผนการเรียน ม.4 (ซ่อนไว้เป็นค่าเริ่มต้น จะแสดงเฉพาะ ม.4) -->
+                <div id="srM4PlansBox" class="hidden bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm text-sm mt-4">
+                    <p class="font-bold text-blue-800 mb-2">แผนการเรียนที่เลือก (ม.4 ทั่วไป):</p>
+                    <ul id="srM4PlansList" class="list-disc list-inside text-gray-700 space-y-1 font-medium">
+                        <!-- รายชื่อแผนการเรียนจะถูกเติมด้วย JavaScript -->
+                    </ul>
+                </div>
+
                 <!-- ลำดับแสดงผล: 1.หมายเลขห้อง 2.ชั้น 3.อาคาร 4.ห้องสอบที่ -->
-                <div class="grid grid-cols-2 gap-4 mt-4">
+                <div class="grid grid-cols-2 gap-4 mt-6">
                     <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-center col-span-2 shadow-sm">
                         <p class="text-sm text-gray-500 uppercase font-bold tracking-wide">1. หมายเลขห้องสอบ</p>
                         <p id="srRealRoom" class="text-5xl font-black text-indra-green mt-1">000</p>
@@ -122,7 +137,7 @@
             <!-- ส่วนแผนที่ดาวเทียม -->
             <div class="flex flex-col h-full">
                 <div class="inline-block bg-indra-green text-white px-4 py-1 rounded-full text-sm font-bold mb-4 self-start">📍 พิกัดอาคารสอบ (ดาวเทียม)</div>
-                <div class="rounded-xl overflow-hidden shadow-md border-2 border-gray-200 flex-grow relative min-h-[300px] lg:min-h-full">
+                <div class="rounded-xl overflow-hidden shadow-md border-2 border-gray-200 flex-grow relative min-h-[350px] lg:min-h-full">
                     <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="border:0; position:absolute; top:0; left:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
                 <p class="text-xs text-gray-500 mt-3 text-center">* แผนที่ใช้สำหรับอ้างอิงตำแหน่งอาคารเบื้องต้น</p>
@@ -209,6 +224,23 @@
         document.getElementById('srId').innerText = data.applicantId;
         document.getElementById('srCat').innerText = data.categoryName;
         
+        // ข้อมูลโรงเรียนเดิม อำเภอ จังหวัด
+        document.getElementById('srOldSchool').innerText = data.oldSchool || "-";
+        document.getElementById('srDistrict').innerText = data.district || "-";
+        document.getElementById('srProvince').innerText = data.province || "-";
+
+        // แสดงผลแผนการเรียน (เฉพาะ ม.4 ทั่วไป)
+        const m4PlansBox = document.getElementById('srM4PlansBox');
+        const m4PlansList = document.getElementById('srM4PlansList');
+        
+        if (data.m4Plans && data.m4Plans.length > 0) {
+            m4PlansList.innerHTML = data.m4Plans.map(plan => `<li>${plan}</li>`).join('');
+            m4PlansBox.classList.remove('hidden');
+        } else {
+            m4PlansBox.classList.add('hidden');
+            m4PlansList.innerHTML = '';
+        }
+
         // 1.หมายเลขห้องสอบ 2.ชั้นที่ 3.อาคาร 4.ห้องสอบที่
         document.getElementById('srRealRoom').innerText = data.realRoomNumber || "-";
         document.getElementById('srFloor').innerText = data.floor ? data.floor : "-";
