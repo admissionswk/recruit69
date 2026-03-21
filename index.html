@@ -9,7 +9,7 @@
     <style>
         body { 
             font-family: 'Sarabun', sans-serif; 
-            /* ใส่รูปพื้นหลัง พระอินทร์ทรงช้าง (สามารถเปลี่ยน URL รูปภาพได้) */
+            /* ใส่รูปพื้นหลัง พระอินทร์ทรงช้าง */
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Erawan_Museum_-_Indra_and_Erawan.jpg/1200px-Erawan_Museum_-_Indra_and_Erawan.jpg');
             background-size: cover;
             background-position: center;
@@ -55,15 +55,32 @@
     <!-- กล่องค้นหา (Search Box) -->
     <div class="glass-card w-full max-w-lg p-8 mb-8 animate-fade-in border-t-4 border-indra-green">
         <form id="searchForm" class="space-y-6">
+            
+            <!-- เลือกประเภทการสอบ -->
             <div>
-                <label class="block text-gray-800 font-bold mb-3 text-lg text-center">
-                    เลขประจำตัวประชาชน (13 หลัก)
+                <label class="block text-gray-800 font-bold mb-3 text-lg text-left pl-2">
+                    1. เลือกประเภทการรับสมัคร <span class="text-red-500">*</span>
+                </label>
+                <select id="category" name="category" required class="w-full p-4 text-lg border-2 border-gray-300 rounded-xl focus:border-indra-green focus:ring-2 focus:ring-green-200 outline-none transition shadow-inner bg-white">
+                    <option value="">-- กรุณาเลือกประเภทการสอบ --</option>
+                    <option value="M1_Out">ม.1 นอกเขตพื้นที่บริการ</option>
+                    <option value="M1_In">ม.1 ในเขตพื้นที่บริการ</option>
+                    <option value="M4_Gen">ม.4 ทั่วไป</option>
+                    <option value="M1_Talent">ม.1 ประเภทความสามารถพิเศษ</option>
+                </select>
+            </div>
+
+            <!-- เลขประจำตัวประชาชน -->
+            <div>
+                <label class="block text-gray-800 font-bold mb-3 text-lg text-left pl-2">
+                    2. เลขประจำตัวประชาชน (13 หลัก) <span class="text-red-500">*</span>
                 </label>
                 <input type="text" id="citizenId" name="citizenId" required maxlength="13" pattern="\d{13}" 
                        placeholder="ระบุเลข 13 หลัก" 
                        class="w-full p-4 text-center text-xl tracking-widest border-2 border-gray-300 rounded-xl focus:border-indra-green focus:ring-2 focus:ring-green-200 outline-none transition shadow-inner">
             </div>
-            <button type="submit" class="w-full bg-indra-green text-white font-bold py-4 rounded-xl shadow-lg text-xl hover:bg-green-800 transition transform hover:-translate-y-1">
+
+            <button type="submit" class="w-full bg-indra-green text-white font-bold py-4 rounded-xl shadow-lg text-xl hover:bg-green-800 transition transform hover:-translate-y-1 mt-4">
                 🔍 ค้นหาข้อมูล
             </button>
         </form>
@@ -134,7 +151,7 @@
     // ==========================================
     // *** สำคัญ: ใส่ URL จาก Google Apps Script ตรงนี้ ***
     // ==========================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrRMXqWx9U9Lgxvm7WT5bcPEbOgH_CVARCufBQ7FDcwc4ckpxCjMsHg6cjxz-Dj7XU/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-aNRIhL7UICCz6nyBpx07CPRzJzz5OxndznjE_hewCTeRM4bfjQh7M1-YhbjaOdFb/exec"; 
 
     // พิกัดอาคาร (เริ่มต้นจากป้อมยาม)
     const schoolCenter = "14.87915252251905, 103.49903061666078"; 
@@ -154,6 +171,8 @@
         }
 
         const citizenId = document.getElementById('citizenId').value;
+        const category = document.getElementById('category').value;
+        
         if(citizenId.length !== 13) {
             alert('กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก');
             return;
@@ -165,7 +184,10 @@
         try {
             const response = await fetch(SCRIPT_URL, { 
                 method: 'POST', 
-                body: JSON.stringify({ citizenId: citizenId }) 
+                body: JSON.stringify({ 
+                    citizenId: citizenId,
+                    category: category 
+                }) 
             });
             
             const result = await response.json();
