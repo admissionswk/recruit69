@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบรับสมัครนักเรียน ส.ว.ค. ปีการศึกษา 2569</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f0f4f8; }
+        .school-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .tab-active { border-bottom: 4px solid #1e3a8a; color: #1e3a8a; font-weight: bold; }
+        .tab-inactive { color: #6b7280; font-weight: normal; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="min-h-screen pb-10">
+
+    <!-- Header -->
+    <div class="school-gradient text-white py-10 px-4 text-center shadow-lg">
+        <h1 class="text-3xl md:text-4xl font-bold mb-2">ระบบรับสมัครนักเรียนออนไลน์</h1>
+        <p class="text-lg opacity-90">โรงเรียนสุรวิทยาคาร ประจำปีการศึกษา 2569</p>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="bg-white shadow-md mb-8 sticky top-0 z-10">
+        <div class="max-w-4xl mx-auto flex">
+            <button onclick="switchTab('register')" id="tab-register" class="flex-1 py-4 text-center tab-active hover:bg-gray-50 transition">
+                <span class="text-lg">📝 สมัครเรียน</span>
+            </button>
+            <button onclick="switchTab('search')" id="tab-search" class="flex-1 py-4 text-center tab-inactive hover:bg-gray-50 transition">
+                <span class="text-lg">🔍 ตรวจสอบห้องสอบ</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4">
+        
+        <!-- ============================================== -->
+        <!-- SECTION 1: สมัครเรียน (Registration Form) -->
+        <!-- ============================================== -->
+        <div id="section-register" class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 animate-fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">กรอกข้อมูลการสมัคร</h2>
+            <form id="regForm" class="space-y-6">
+                <!-- Dropdown ประเภท -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">ประเภทการรับสมัคร <span class="text-red-500">*</span></label>
+                    <select id="regCategory" name="category" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white">
+                        <option value="">-- เลือกประเภท --</option>
+                        <option value="M1_Out">1. ม.1 นอกเขตพื้นที่บริการ</option>
+                        <option value="M1_In">2. ม.1 ในเขตพื้นที่บริการ</option>
+                        <option value="M4_Gen">3. ม.4 ทั่วไป</option>
+                        <option value="M1_Talent">4. ม.1 ประเภทความสามารถพิเศษ</option>
+                    </select>
+                </div>
+
+                <!-- เลขประจำตัว -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">เลขที่ประจำตัวผู้สมัคร <span class="text-red-500">*</span></label>
+                    <input type="text" name="applicantId" required placeholder="เช่น 10001, 20001" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- ชื่อสกุล -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">คำนำหน้าชื่อ</label>
+                        <select name="title" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white">
+                            <option value="เด็กชาย">เด็กชาย</option>
+                            <option value="เด็กหญิง">เด็กหญิง</option>
+                            <option value="นาย">นาย</option>
+                            <option value="นางสาว">นางสาว</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">ชื่อ-นามสกุล <span class="text-red-500">*</span></label>
+                        <input type="text" name="fullname" required placeholder="ไม่ต้องระบุคำนำหน้า" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">เลขประจำตัวประชาชน (13 หลัก) <span class="text-red-500">*</span></label>
+                    <input type="text" name="citizenId" required maxlength="13" pattern="\d{13}" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">โรงเรียนเดิม</label>
+                    <input type="text" name="oldSchool" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- ส่วนของ ม.4 เฉพาะ -->
+                <div id="m4Section" class="hidden bg-blue-50 p-6 rounded-xl border border-blue-200 space-y-4">
+                    <h3 class="text-xl font-bold text-blue-800 border-b border-blue-200 pb-2">เฉพาะผู้สมัคร ม.4 ทั่วไป</h3>
+                    <input type="text" name="swkId" placeholder="เลขประจำตัว ส.ว.ค.เดิม (ถ้ามี)" class="w-full p-3 border rounded-lg mb-4 bg-white">
+                    
+                    <label class="block text-gray-700 font-bold">เลือกแผนการเรียน (เลือกให้ครบ 4 อันดับ) <span class="text-red-500">*</span></label>
+                    <!-- แผน 4 อันดับถูกสร้างด้วย JavaScript ด้านล่าง -->
+                    <div class="space-y-3" id="m4PlanContainer"></div>
+                </div>
+
+                <button type="submit" class="w-full school-gradient text-white font-bold py-4 rounded-xl shadow-md text-xl hover:opacity-90 transition">
+                    ยืนยันการสมัคร
+                </button>
+            </form>
+        </div>
+
+
+        <!-- ============================================== -->
+        <!-- SECTION 2: ค้นหาห้องสอบ (Search & Map) -->
+        <!-- ============================================== -->
+        <div id="section-search" class="hidden animate-fade-in space-y-6">
+            
+            <!-- กล่องค้นหา -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">ค้นหาห้องสอบและอาคาร</h2>
+                <form id="searchForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">ประเภท <span class="text-red-500">*</span></label>
+                            <select name="searchCategory" required class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white">
+                                <option value="M1_Out">ม.1 นอกเขตพื้นที่บริการ</option>
+                                <option value="M1_In">ม.1 ในเขตพื้นที่บริการ</option>
+                                <option value="M4_Gen">ม.4 ทั่วไป</option>
+                                <option value="M1_Talent">ม.1 ประเภทความสามารถพิเศษ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">เลขที่ประจำตัวผู้สมัคร <span class="text-red-500">*</span></label>
+                            <input type="text" name="searchApplicantId" required placeholder="เช่น 10001" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl shadow-md text-lg hover:bg-blue-700 transition">
+                        🔍 ค้นหาข้อมูล
+                    </button>
+                </form>
+            </div>
+
+            <!-- กล่องแสดงผล (ซ่อนไว้ก่อนจนกว่าจะค้นหาเจอ) -->
+            <div id="searchResult" class="hidden bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- ข้อมูลส่วนตัวและห้องสอบ -->
+                    <div class="space-y-4">
+                        <div class="inline-block bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-bold mb-2">ข้อมูลผู้สมัคร</div>
+                        <h3 id="srName" class="text-2xl font-bold text-gray-800">ชื่อ-นามสกุล</h3>
+                        <p class="text-gray-600">รหัสสมัคร: <span id="srId" class="font-bold text-blue-600">XXXXX</span></p>
+                        <p class="text-gray-600 border-b pb-4">ประเภท: <span id="srCat">ม.X</span></p>
+                        
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 mt-4 text-center">
+                            <p class="text-sm text-gray-500 uppercase tracking-wide">ห้องสอบที่</p>
+                            <p id="srExamRoom" class="text-4xl font-black text-blue-800">00</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center">
+                                <p class="text-sm text-gray-500 uppercase">อาคาร</p>
+                                <p id="srBuilding" class="text-xl font-bold text-gray-800">-</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center">
+                                <p class="text-sm text-gray-500 uppercase">หมายเลขห้อง</p>
+                                <p id="srRealRoom" class="text-xl font-bold text-gray-800">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- แผนที่ Google Maps -->
+                    <div>
+                        <div class="inline-block bg-yellow-100 text-yellow-700 px-4 py-1 rounded-full text-sm font-bold mb-4">📍 พิกัดอาคารสอบ</div>
+                        <div class="rounded-xl overflow-hidden shadow-inner border border-gray-200 h-64 bg-gray-100 relative">
+                            <iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2 text-center">* แผนที่ใช้สำหรับอ้างอิงตำแหน่งเบื้องต้น กรุณาดูป้ายบอกทางในโรงเรียนประกอบ</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loader" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white p-6 rounded-xl flex flex-col items-center shadow-2xl">
+                <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
+                <p class="font-bold text-gray-800">กำลังประมวลผล...</p>
+                <p class="text-sm text-gray-500 mt-1">กรุณารอสักครู่</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // *** สำคัญที่สุด: ใส่ URL จาก Google Apps Script ตรงนี้ ***
+        // ==========================================
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwD6rc44VWIXUa9G5bcJFKQoc2M7tDnHwT1k0SrLywzQv9i4b6BZ45uFtThY2D9ojlAGg/exec"; 
+
+        // ==========================================
+        // UI Logic (Tabs & M4 Form Generation)
+        // ==========================================
+        function switchTab(tabId) {
+            document.getElementById('section-register').classList.add('hidden');
+            document.getElementById('section-search').classList.add('hidden');
+            document.getElementById('section-' + tabId).classList.remove('hidden');
+
+            document.getElementById('tab-register').className = "flex-1 py-4 text-center transition hover:bg-gray-50 " + (tabId==='register' ? 'tab-active' : 'tab-inactive');
+            document.getElementById('tab-search').className = "flex-1 py-4 text-center transition hover:bg-gray-50 " + (tabId==='search' ? 'tab-active' : 'tab-inactive');
+            
+            // ซ่อนผลลัพธ์การค้นหาเมื่อสลับแท็บ
+            if(tabId === 'register') {
+                document.getElementById('searchResult').classList.add('hidden');
+            }
+        }
+
+        // สร้างฟอร์มแผนการเรียน ม.4 อัตโนมัติ (เพื่อลดบรรทัดโค้ด HTML)
+        const m4Container = document.getElementById('m4PlanContainer');
+        const planOptions = `<option value="">-- เลือกแผนการเรียน --</option>
+            <option value="วิทยาศาสตร์ คณิตศาสตร์-เทคโนโลยี">1) วิทยาศาสตร์ คณิตศาสตร์-เทคโนโลยี</option>
+            <option value="วิทยาศาสตร์ คณิตศาสตร์ (วิทยาศาสตร์พลังสิบ)">2) วิทยาศาสตร์ คณิตศาสตร์ (วิทยาศาสตร์พลังสิบ)</option>
+            <option value="วิทยาศาสตร์-คณิตศาสตร์ (ปกติ)">3) วิทยาศาสตร์-คณิตศาสตร์ (ปกติ)</option>
+            <option value="ศิลป์-คณิต">4) ศิลป์-คณิต</option>
+            <option value="ศิลป์-ภาษา">5) ศิลป์-ภาษา (ต้องระบุภาษา)</option>`;
+        
+        for(let i=1; i<=4; i++){
+            m4Container.innerHTML += `
+            <div class="flex flex-col md:flex-row gap-2 items-start md:items-center">
+                <div class="flex-1 w-full">
+                    <label class="text-xs font-bold text-gray-600 mb-1 block">อันดับที่ ${i}</label>
+                    <select name="plan${i}" id="plan${i}" class="m4-plan w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white">${planOptions}</select>
+                </div>
+                <div class="flex-1 hidden w-full" id="langDiv${i}">
+                    <label class="text-xs font-bold text-blue-600 mb-1 block">ระบุภาษา (จีน, เกาหลี, ญี่ปุ่น, เขมร)</label>
+                    <input type="text" name="lang${i}" id="lang${i}" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 bg-white" placeholder="พิมพ์ระบุภาษา">
+                </div>
+            </div>`;
+        }
+
+        // ควบคุม M4 Form Logic (แสดง/ซ่อน เมื่อเลือก ม.4 ทั่วไป)
+        document.getElementById('regCategory').addEventListener('change', function() {
+            const isM4 = this.value === 'M4_Gen';
+            document.getElementById('m4Section').classList.toggle('hidden', !isM4);
+            document.querySelectorAll('.m4-plan').forEach(el => isM4 ? el.setAttribute('required', 'required') : el.removeAttribute('required'));
+        });
+
+        // ควบคุมการแสดงช่องระบุภาษาเมื่อเลือก ศิลป์-ภาษา
+        document.getElementById('m4PlanContainer').addEventListener('change', function(e) {
+            if(e.target.tagName === 'SELECT') {
+                const idNum = e.target.id.replace('plan', '');
+                const langDiv = document.getElementById('langDiv' + idNum);
+                const langInput = document.getElementById('lang' + idNum);
+                if(e.target.value === 'ศิลป์-ภาษา') {
+                    langDiv.classList.remove('hidden'); 
+                    langInput.setAttribute('required','required');
+                } else {
+                    langDiv.classList.add('hidden'); 
+                    langInput.removeAttribute('required'); 
+                    langInput.value = '';
+                }
+            }
+        });
+
+        // ==========================================
+        // Map Coordinates (พิกัดอาคาร รร.สุรวิทยาคาร)
+        // ** คุณสามารถเปลี่ยนพิกัด Lat, Long ในนี้ให้ตรงกับตำแหน่งตึกจริงได้ **
+        // ==========================================
+        const schoolCenter = "14.890666,103.492110"; // พิกัดกลางโรงเรียน กรณีหาตึกไม่เจอ
+        const buildingCoods = {
+            "1": "14.891100, 103.492000",
+            "2": "14.890500, 103.492200",
+            "3": "14.890700, 103.491800",
+            "7": "14.889900, 103.491500",
+            "12": "14.891500, 103.492500"
+            // วิธีเพิ่ม: "หมายเลขอาคารตาม Excel": "ละติจูด, ลองจิจูด"
+        };
+
+        // ==========================================
+        // Form Submission (สมัคร & ค้นหา)
+        // ==========================================
+        async function submitData(formElement, actionType) {
+            if (!SCRIPT_URL || SCRIPT_URL === "") { 
+                alert('ข้อผิดพลาด: คุณยังไม่ได้ใส่ลิงก์ SCRIPT_URL ในโค้ด HTML'); 
+                return; 
+            }
+            
+            document.getElementById('loader').classList.remove('hidden');
+            
+            const formData = new FormData(formElement);
+            const data = Object.fromEntries(formData.entries());
+            data.action = actionType; // ส่งไปบอก Backend ว่าจะ register หรือ search
+            
+            // ถ้าเป็นการค้นหา ให้แปลงชื่อคีย์ให้ตรงกับที่ Backend ต้องการ
+            if (actionType === 'search') {
+                data.category = data.searchCategory;
+                data.applicantId = data.searchApplicantId;
+            }
+
+            try {
+                const response = await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify(data) 
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    if (actionType === 'register') {
+                        alert('สมัครสำเร็จ! ระบบจะพาคุณไปยังหน้าตรวจสอบห้องสอบ');
+                        formElement.reset(); // ล้างข้อมูลฟอร์มสมัคร
+                        
+                        // เอาข้อมูลที่เพิ่งสมัครไปกรอกในหน้าค้นหาให้เลย
+                        document.querySelector('[name="searchCategory"]').value = data.category;
+                        document.querySelector('[name="searchApplicantId"]').value = data.applicantId;
+                        
+                        // สลับไปแท็บค้นหาและกดปุ่ม Submit ค้นหาให้อัตโนมัติ
+                        switchTab('search');
+                        document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+                    } else if (actionType === 'search') {
+                        showSearchResult(result.data);
+                    }
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                alert('แจ้งเตือน: ' + error.message);
+            } finally {
+                document.getElementById('loader').classList.add('hidden');
+            }
+        }
+
+        // ดักจับการกด Submit ของฟอร์มทั้งสอง
+        document.getElementById('regForm').addEventListener('submit', (e) => { 
+            e.preventDefault(); 
+            submitData(e.target, 'register'); 
+        });
+        document.getElementById('searchForm').addEventListener('submit', (e) => { 
+            e.preventDefault(); 
+            submitData(e.target, 'search'); 
+        });
+
+        // ฟังก์ชันแสดงผลลัพธ์การค้นหา
+        function showSearchResult(data) {
+            document.getElementById('srName').innerText = data.fullName;
+            document.getElementById('srId').innerText = data.applicantId;
+            document.getElementById('srCat').innerText = data.categoryName;
+            
+            document.getElementById('srExamRoom').innerText = data.examRoom || "-";
+            document.getElementById('srBuilding').innerText = data.building ? "อาคาร " + data.building : "-";
+            document.getElementById('srRealRoom').innerText = data.realRoomNumber ? "ห้อง " + data.realRoomNumber : "-";
+
+            // อัปเดตแผนที่
+            const bld = String(data.building).trim();
+            const coords = buildingCoods[bld] || schoolCenter; // หาพิกัดจากตัวแปรด้านบน
+            
+            // สร้าง URL Google Maps แบบฝัง (iframe)
+            const mapUrl = `https://maps.google.com/maps?q=${coords}&hl=th&z=18&output=embed`;
+            document.getElementById('mapFrame').src = mapUrl;
+
+            // แสดงกล่องผลลัพธ์
+            document.getElementById('searchResult').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
