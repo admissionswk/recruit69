@@ -166,7 +166,7 @@
     // ==========================================
     // *** สำคัญ: ใส่ URL จาก Google Apps Script ตรงนี้ ***
     // ==========================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySKWNbLu58eR8AjOUIQEGoYdcD5yKOMnp3utgzt9c0nAEtdyij8sSTVQgZmMIQrKzB/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYDUB5oGHwfRtL3OmGdShSdnfh2QD-_86FVMm-TW0uIy21L7Exur_SuTr6Gn1mUriA/exec"; 
     const SECRET_TOKEN = "SWK-Secure-2569!"; // เพิ่มรหัสลับสำหรับป้องกันบอท (วิธีที่ 4)
 
     // พิกัดอาคาร (เริ่มต้นจากป้อมยาม)
@@ -243,7 +243,7 @@
             m4PlansList.innerHTML = '';
         }
 
-        // 1.หมายเลขห้องสอบ 2.ชั้นที่ 3.อาคาร 4.ห้องสอบที่
+        // หมายเลขห้องสอบ 2.ชั้นที่ 3.อาคาร 4.ห้องสอบที่
         document.getElementById('srRealRoom').innerText = data.realRoomNumber || "-";
         document.getElementById('srFloor').innerText = data.floor ? data.floor : "-";
         document.getElementById('srBuilding').innerText = data.building ? "อาคาร " + data.building : "-";
