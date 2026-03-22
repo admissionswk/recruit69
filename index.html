@@ -166,7 +166,8 @@
     // ==========================================
     // *** สำคัญ: ใส่ URL จาก Google Apps Script ตรงนี้ ***
     // ==========================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXQszQtaEILanh66hVfTBSIM-pLt7e72oW_qYD8WoM0jxvh481l-hav7-9qIG04gpw/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySKWNbLu58eR8AjOUIQEGoYdcD5yKOMnp3utgzt9c0nAEtdyij8sSTVQgZmMIQrKzB/exec"; 
+    const SECRET_TOKEN = "SWK-Secure-2569!"; // เพิ่มรหัสลับสำหรับป้องกันบอท (วิธีที่ 4)
 
     // พิกัดอาคาร (เริ่มต้นจากป้อมยาม)
     const schoolCenter = "14.87915252251905, 103.49903061666078"; 
@@ -201,7 +202,8 @@
                 method: 'POST', 
                 body: JSON.stringify({ 
                     citizenId: citizenId,
-                    category: category 
+                    category: category,
+                    token: SECRET_TOKEN // แนบรหัสลับไปตรวจสอบกับหลังบ้าน
                 }) 
             });
             
