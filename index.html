@@ -9,7 +9,6 @@
     <style>
         body { 
             font-family: 'Sarabun', sans-serif; 
-            /* ใส่รูปพื้นหลัง พระอินทร์ทรงช้าง */
             background-image: url('https://scontent-bkk1-1.xx.fbcdn.net/v/t39.30808-6/647366081_1491780026290840_6359285124854972708_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=3_5Yjsqsv58Q7kNvwFu2HGb&_nc_oc=AdrNM4R_FGC_kVfzOgcMIizMqm4ehkCSoEd9FrKdKdtI2fD7V827lMjPHNUgXCTHx5A&_nc_zt=23&_nc_ht=scontent-bkk1-1.xx&_nc_gid=xyW3oHTCgnGfIILTUFwXrA&_nc_ss=7a32e&oh=00_AfyTm-eY4oSxb4V-vTg21qIzevBhoFqdFj6Lmqz_NrvXjw&oe=69C586E8');
             background-size: cover;
             background-position: center;
@@ -95,7 +94,7 @@
                 <div class="inline-block bg-yellow-100 text-yellow-800 px-4 py-1 rounded-full text-sm font-bold mb-2">ข้อมูลผู้เข้าสอบ</div>
                 
                 <h3 id="srName" class="text-3xl font-bold text-gray-800 leading-tight">ชื่อ-นามสกุล</h3>
-                <p class="text-gray-600 text-lg">รหัสประจำตัว: <span id="srId" class="font-bold text-indra-green">XXXXX</span></p>
+                <p class="text-gray-600 text-lg">รหัสประจำตัวผู้เข้าสอบ: <span id="srId" class="font-bold text-indra-green">XXXXX</span></p>
                 <p class="text-gray-600 pb-2">ประเภท: <span id="srCat" class="font-bold text-gray-800">ม.X</span></p>
                 
                 <!-- ข้อมูลโรงเรียนเดิม, อำเภอ, จังหวัด -->
@@ -116,19 +115,19 @@
                 <!-- ลำดับแสดงผล: 1.หมายเลขห้อง 2.ชั้น 3.อาคาร 4.ห้องสอบที่ -->
                 <div class="grid grid-cols-2 gap-4 mt-6">
                     <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-center col-span-2 shadow-sm">
-                        <p class="text-sm text-gray-500 uppercase font-bold tracking-wide">1. หมายเลขห้องสอบ</p>
+                        <p class="text-sm text-gray-500 uppercase font-bold tracking-wide"> หมายเลขห้องสอบ</p>
                         <p id="srRealRoom" class="text-5xl font-black text-indra-green mt-1">000</p>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-sm">
-                        <p class="text-sm text-gray-500 uppercase font-bold">2. ชั้นที่</p>
+                        <p class="text-sm text-gray-500 uppercase font-bold"> ชั้นที่</p>
                         <p id="srFloor" class="text-2xl font-bold text-gray-800 mt-1">-</p>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-sm">
-                        <p class="text-sm text-gray-500 uppercase font-bold">3. อาคาร</p>
+                        <p class="text-sm text-gray-500 uppercase font-bold">ชื่ออาคาร</p>
                         <p id="srBuilding" class="text-2xl font-bold text-gray-800 mt-1">-</p>
                     </div>
                     <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 text-center col-span-2 shadow-sm">
-                        <p class="text-sm text-yellow-700 uppercase font-bold">4. ห้องสอบที่</p>
+                        <p class="text-sm text-yellow-700 uppercase font-bold">ห้องสอบที่</p>
                         <p id="srExamRoom" class="text-2xl font-bold text-yellow-800 mt-1">-</p>
                     </div>
                 </div>
@@ -163,13 +162,11 @@
 </div>
 
 <script>
-    // ==========================================
-    // *** สำคัญ: ใส่ URL จาก Google Apps Script ตรงนี้ ***
-    // ==========================================
+  
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqGb6nBYK-RPwLeRkIgPnL1GWbj6LQ9Uc2SyQ4yJadQrU_O1xhpEnkYYlCs5b3j7m7VA/exec"; 
-    const SECRET_TOKEN = "SWK-Secure-2569!"; // รหัสลับสำหรับตรวจสอบหลังบ้าน
+    const SECRET_TOKEN = "SWK-Secure-2569!"; 
 
-    // พิกัดอาคาร (เริ่มต้นจากป้อมยาม)
+
     const schoolCenter = "14.87915252251905, 103.49903061666078"; 
     const buildingCoods = {
         "7": "14.880480096933743, 103.49897802586644",
