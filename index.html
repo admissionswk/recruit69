@@ -10,7 +10,6 @@
         body { 
             font-family: 'Sarabun', sans-serif; 
             /* ใส่รูปพื้นหลัง พระอินทร์ทรงช้าง */
-            /*background-image: url('https://scontent.fbkk12-2.fna.fbcdn.net/v/t39.30808-6/655625000_10243172335864524_7594562877824262239_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=13d280&_nc_ohc=4YYM-FCh0JwQ7kNvwHGI6Qc&_nc_oc=Adq10baMLjkDugfJDeKbJ1eu9g6st4IcaMZRC6Cx_hSPT0mCHmzMb-QLW9zt1VLqrWI&_nc_zt=23&_nc_ht=scontent.fbkk12-2.fna&_nc_gid=eKZ6BcbrF4diPDQJ4sM32g&_nc_ss=7a32e&oh=00_Afx0aAwdLyTDsG2KVb_UjkHZeiyYcI3iGp2wbILqj5r8Bg&oe=69C55C20');*/
             background-image: url('https://scontent-bkk1-1.xx.fbcdn.net/v/t39.30808-6/647366081_1491780026290840_6359285124854972708_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=3_5Yjsqsv58Q7kNvwFu2HGb&_nc_oc=AdrNM4R_FGC_kVfzOgcMIizMqm4ehkCSoEd9FrKdKdtI2fD7V827lMjPHNUgXCTHx5A&_nc_zt=23&_nc_ht=scontent-bkk1-1.xx&_nc_gid=xyW3oHTCgnGfIILTUFwXrA&_nc_ss=7a32e&oh=00_AfyTm-eY4oSxb4V-vTg21qIzevBhoFqdFj6Lmqz_NrvXjw&oe=69C586E8');
             background-size: cover;
             background-position: center;
@@ -19,7 +18,7 @@
         
         /* สร้าง Overlay ทับรูปภาพ เพื่อให้ตัวหนังสืออ่านง่ายและดู Minimal */
         .bg-overlay {
-            background-color: rgba(244, 248, 241, 0.45); /* สีขาวอมเขียวอ่อนๆ โปร่งแสง */
+            background-color: rgba(244, 248, 241, 0.85); /* สีขาวอมเขียวอ่อนๆ โปร่งแสง */
             backdrop-filter: blur(8px);
             min-height: 100vh;
         }
@@ -32,7 +31,7 @@
         .bg-indra-gold { background-color: #d4af37; }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
@@ -67,7 +66,7 @@
                     <option value="M1_Out">ม.1 นอกเขตพื้นที่บริการ</option>
                     <option value="M1_In">ม.1 ในเขตพื้นที่บริการ</option>
                     <option value="M4_Gen">ม.4 ทั่วไป</option>
-                    <option value="M1_Talent">ม.1 ประเภทความสามารถพิเศษ</option>
+                    <option value="M4_swk">ม.4 (นักเรียน ม.3 เดิม)</option>
                 </select>
             </div>
 
@@ -96,7 +95,7 @@
                 <div class="inline-block bg-yellow-100 text-yellow-800 px-4 py-1 rounded-full text-sm font-bold mb-2">ข้อมูลผู้เข้าสอบ</div>
                 
                 <h3 id="srName" class="text-3xl font-bold text-gray-800 leading-tight">ชื่อ-นามสกุล</h3>
-                <p class="text-gray-600 text-lg">รหัสประจำตัวผู้เข้าสอบ: <span id="srId" class="font-bold text-indra-green">XXXXX</span></p>
+                <p class="text-gray-600 text-lg">รหัสประจำตัว: <span id="srId" class="font-bold text-indra-green">XXXXX</span></p>
                 <p class="text-gray-600 pb-2">ประเภท: <span id="srCat" class="font-bold text-gray-800">ม.X</span></p>
                 
                 <!-- ข้อมูลโรงเรียนเดิม, อำเภอ, จังหวัด -->
@@ -109,27 +108,27 @@
                 <!-- แผนการเรียน ม.4 (ซ่อนไว้เป็นค่าเริ่มต้น จะแสดงเฉพาะ ม.4) -->
                 <div id="srM4PlansBox" class="hidden bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm text-sm mt-4">
                     <p class="font-bold text-blue-800 mb-2">แผนการเรียนที่เลือก (ม.4 ทั่วไป):</p>
-                    <ul id="srM4PlansList" class="list-disc list-inside text-gray-700 space-y-1 font-medium">
+                    <ul id="srM4PlansList" class="list-none text-gray-700 space-y-2 font-medium">
                         <!-- รายชื่อแผนการเรียนจะถูกเติมด้วย JavaScript -->
                     </ul>
                 </div>
 
-             
+                <!-- ลำดับแสดงผล: 1.หมายเลขห้อง 2.ชั้น 3.อาคาร 4.ห้องสอบที่ -->
                 <div class="grid grid-cols-2 gap-4 mt-6">
                     <div class="bg-green-50 p-4 rounded-xl border border-green-200 text-center col-span-2 shadow-sm">
-                        <p class="text-sm text-gray-500 uppercase font-bold tracking-wide">หมายเลขห้องสอบ</p>
+                        <p class="text-sm text-gray-500 uppercase font-bold tracking-wide">1. หมายเลขห้องสอบ</p>
                         <p id="srRealRoom" class="text-5xl font-black text-indra-green mt-1">000</p>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-sm">
-                        <p class="text-sm text-gray-500 uppercase font-bold">ชั้นที่</p>
+                        <p class="text-sm text-gray-500 uppercase font-bold">2. ชั้นที่</p>
                         <p id="srFloor" class="text-2xl font-bold text-gray-800 mt-1">-</p>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-sm">
-                        <p class="text-sm text-gray-500 uppercase font-bold">ชื่ออาคาร</p>
+                        <p class="text-sm text-gray-500 uppercase font-bold">3. อาคาร</p>
                         <p id="srBuilding" class="text-2xl font-bold text-gray-800 mt-1">-</p>
                     </div>
                     <div class="bg-yellow-50 p-4 rounded-xl border border-yellow-200 text-center col-span-2 shadow-sm">
-                        <p class="text-sm text-yellow-700 uppercase font-bold">ห้องสอบที่</p>
+                        <p class="text-sm text-yellow-700 uppercase font-bold">4. ห้องสอบที่</p>
                         <p id="srExamRoom" class="text-2xl font-bold text-yellow-800 mt-1">-</p>
                     </div>
                 </div>
@@ -164,10 +163,13 @@
 </div>
 
 <script>
+    // ==========================================
+    // *** สำคัญ: ใส่ URL จาก Google Apps Script ตรงนี้ ***
+    // ==========================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbylN5VAyL9cV2cH5MbEQxe_CN8DdVqlc8Xge3EyGNBgMtx1OUVOgKzBpaC7Zed_k6ZusQ/exec"; 
+    const SECRET_TOKEN = "SWK-Secure-2569!"; // รหัสลับสำหรับตรวจสอบหลังบ้าน
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySx0Y7lOcUd40KHgOtTqsYKuBonhKdBB30SHSA871e4TmRNxlUByP6R3mvhNh_kcY04Q/exec"; 
-    const SECRET_TOKEN = "SWK-Secure-2569!"; 
-
+    // พิกัดอาคาร (เริ่มต้นจากป้อมยาม)
     const schoolCenter = "14.87915252251905, 103.49903061666078"; 
     const buildingCoods = {
         "7": "14.880480096933743, 103.49897802586644",
@@ -187,7 +189,7 @@
         const citizenId = document.getElementById('citizenId').value;
         const category = document.getElementById('category').value;
         
-        if(citizenId.length !== 13) {
+        if(category !== 'M4_swk' && citizenId.length !== 13) {
             alert('กรุณากรอกเลขบัตรประชาชนให้ครบ 13 หลัก');
             return;
         }
@@ -201,7 +203,7 @@
                 body: JSON.stringify({ 
                     citizenId: citizenId,
                     category: category,
-                    token: SECRET_TOKEN // แนบรหัสลับไปตรวจสอบกับหลังบ้าน
+                    token: SECRET_TOKEN 
                 }) 
             });
             
@@ -224,40 +226,66 @@
         document.getElementById('srId').innerText = data.applicantId;
         document.getElementById('srCat').innerText = data.categoryName;
         
-  
+        // ข้อมูลโรงเรียนเดิม อำเภอ จังหวัด
         document.getElementById('srOldSchool').innerText = data.oldSchool || "-";
         document.getElementById('srDistrict').innerText = data.district || "-";
         document.getElementById('srProvince').innerText = data.province || "-";
 
+        // แสดงผลแผนการเรียน (เฉพาะ ม.4 ทั่วไป)
         const m4PlansBox = document.getElementById('srM4PlansBox');
         const m4PlansList = document.getElementById('srM4PlansList');
         
         if (data.m4Plans && data.m4Plans.length > 0) {
-            m4PlansList.innerHTML = data.m4Plans.map(plan => `<li>${plan}</li>`).join('');
+            // ใส่แท็ก <li> โชว์แต่ละบรรทัด
+            m4PlansList.innerHTML = data.m4Plans.map(plan => `
+                <li class="flex items-start">
+                    <span class="text-blue-500 mr-2">▶</span> 
+                    <span>${plan}</span>
+                </li>
+            `).join('');
             m4PlansBox.classList.remove('hidden');
         } else {
             m4PlansBox.classList.add('hidden');
             m4PlansList.innerHTML = '';
         }
 
-   
+        // 1.หมายเลขห้องสอบ 2.ชั้นที่ 3.อาคาร 4.ห้องสอบที่
         document.getElementById('srRealRoom').innerText = data.realRoomNumber || "-";
         document.getElementById('srFloor').innerText = data.floor ? data.floor : "-";
         document.getElementById('srBuilding').innerText = data.building ? "อาคาร " + data.building : "-";
         document.getElementById('srExamRoom').innerText = data.examRoom || "-";
 
-       
+        // แผนที่ดาวเทียม (&t=k)
         const bld = String(data.building).trim();
         const coords = buildingCoods[bld] || schoolCenter;
         const mapUrl = `https://maps.google.com/maps?q=${coords}&hl=th&z=18&t=k&output=embed`;
         document.getElementById('mapFrame').src = mapUrl;
 
         document.getElementById('searchResult').classList.remove('hidden');
-       
+        
+        // เลื่อนหน้าจอลงมาให้เห็นผลลัพธ์พอดี (สำหรับมือถือ)
         setTimeout(() => {
             document.getElementById('searchResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
     }
+
+    // ฟังก์ชัน: เปลี่ยนเงื่อนไขช่องกรอกข้อความเมื่อเลือก "ม.4 เดิม"
+    document.getElementById('category').addEventListener('change', function() {
+        const citizenInput = document.getElementById('citizenId');
+        const citizenLabel = citizenInput.previousElementSibling;
+        
+        if (this.value === 'M4_swk') {
+            citizenLabel.innerHTML = '2. เลขประจำตัวนักเรียน ส.ว.ค. <span class="text-red-500">*</span>';
+            citizenInput.placeholder = "ระบุเลขประจำตัวนักเรียน";
+            citizenInput.removeAttribute('pattern');
+            citizenInput.removeAttribute('maxlength');
+        } else {
+            citizenLabel.innerHTML = '2. เลขประจำตัวประชาชน (13 หลัก) <span class="text-red-500">*</span>';
+            citizenInput.placeholder = "ระบุเลข 13 หลัก";
+            citizenInput.setAttribute('pattern', '\\d{13}');
+            citizenInput.setAttribute('maxlength', '13');
+        }
+    });
 </script>
 </body>
 </html>
