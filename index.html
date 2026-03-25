@@ -14,15 +14,12 @@
             background-position: center;
             background-attachment: fixed;
         }
-        
-        /* สร้าง Overlay ทับรูปภาพ เพื่อให้ตัวหนังสืออ่านง่ายและดู Minimal */
         .bg-overlay {
             background-color: rgba(244, 248, 241, 0.35); /* สีขาวอมเขียวอ่อนๆ โปร่งแสง */
             backdrop-filter: blur(8px);
             min-height: 100vh;
         }
 
-        /* โทนสีเขียวพระอินทร์ และ สีทอง */
         .text-indra-green { color: #1a5c32; }
         .bg-indra-green { background-color: #1a5c32; }
         .border-indra-green { border-color: #1a5c32; }
@@ -223,17 +220,14 @@
         document.getElementById('srId').innerText = data.applicantId;
         document.getElementById('srCat').innerText = data.categoryName;
         
-        // ข้อมูลโรงเรียนเดิม อำเภอ จังหวัด
         document.getElementById('srOldSchool').innerText = data.oldSchool || "-";
         document.getElementById('srDistrict').innerText = data.district || "-";
         document.getElementById('srProvince').innerText = data.province || "-";
 
-        // แสดงผลแผนการเรียน (เฉพาะ ม.4 ทั่วไป)
         const m4PlansBox = document.getElementById('srM4PlansBox');
         const m4PlansList = document.getElementById('srM4PlansList');
         
         if (data.m4Plans && data.m4Plans.length > 0) {
-            // ใส่แท็ก <li> โชว์แต่ละบรรทัด
             m4PlansList.innerHTML = data.m4Plans.map(plan => `
                 <li class="flex items-start">
                     <span class="text-blue-500 mr-2">▶</span> 
@@ -246,13 +240,11 @@
             m4PlansList.innerHTML = '';
         }
 
-        // 1.หมายเลขห้องสอบ 2.ชั้นที่ 3.อาคาร 4.ห้องสอบที่
         document.getElementById('srRealRoom').innerText = data.realRoomNumber || "-";
         document.getElementById('srFloor').innerText = data.floor ? data.floor : "-";
         document.getElementById('srBuilding').innerText = data.building ? "อาคาร " + data.building : "-";
         document.getElementById('srExamRoom').innerText = data.examRoom || "-";
 
-        // แผนที่ดาวเทียม (&t=k)
         const bld = String(data.building).trim();
         const coords = buildingCoods[bld] || schoolCenter;
         const mapUrl = `https://maps.google.com/maps?q=${coords}&hl=th&z=18&t=k&output=embed`;
@@ -260,13 +252,11 @@
 
         document.getElementById('searchResult').classList.remove('hidden');
         
-        // เลื่อนหน้าจอลงมาให้เห็นผลลัพธ์พอดี (สำหรับมือถือ)
         setTimeout(() => {
             document.getElementById('searchResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
     }
 
-    // ฟังก์ชัน: เปลี่ยนเงื่อนไขช่องกรอกข้อความเมื่อเลือก "ม.4 เดิม"
     document.getElementById('category').addEventListener('change', function() {
         const citizenInput = document.getElementById('citizenId');
         const citizenLabel = citizenInput.previousElementSibling;
